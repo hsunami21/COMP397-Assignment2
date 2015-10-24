@@ -8,6 +8,7 @@
         Commit #1: Initial commit and added bet button functionality
         Commit #2: Added additionaly spin functionality (decrease credit, increase jackpot)
         Commit #3: Added fruit tally reset and winnings functionality
+        Commit #4: Added check jackpot win functionality
 */
 
 /// <reference path="../config/config.ts" />

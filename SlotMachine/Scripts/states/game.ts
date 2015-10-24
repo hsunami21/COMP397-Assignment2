@@ -8,6 +8,7 @@
         Commit #1: Initial commit and added bet button functionality
         Commit #2: Added additionaly spin functionality (decrease credit, increase jackpot)
         Commit #3: Added fruit tally reset and winnings functionality
+        Commit #4: Added check jackpot win functionality
 */
 
 module states {
@@ -126,18 +127,18 @@ module states {
         // PRIVATE METHODS ++++++++++++++++++++++++++++++++++++++++++++++
         // Callback function / Event Handler for Back Button Click
         private _clickBet1Button(event: createjs.MouseEvent): void {
-            this._lblBet.text = "1";
-            this._playerBet = 1;
+            this._playerBet += 1;
+            this._lblBet.text = this._playerBet.toString();
         }
 
         private _clickBet10Button(event: createjs.MouseEvent): void {
-            this._lblBet.text = "10";
-            this._playerBet = 10;
+            this._playerBet += 10;
+            this._lblBet.text = this._playerBet.toString();
         }
 
         private _clickBet100Button(event: createjs.MouseEvent): void {
-            this._lblBet.text = "100";
-            this._playerBet = 100;
+            this._playerBet += 100;
+            this._lblBet.text = this._playerBet.toString();
         }
 
         private _clickBetMaxButton(event: createjs.MouseEvent): void {
@@ -146,7 +147,7 @@ module states {
         }
 
         /* Utility function to reset all fruit tallies */
-        private _resetFruitTally() {
+        private _resetFruitTally(): void {
             this._grapes = 0;
             this._bananas = 0;
             this._oranges = 0;
@@ -157,8 +158,21 @@ module states {
             this._blanks = 0;
         }
 
+        /* Check to see if the player won the jackpot */
+        private _checkJackPot(): boolean {
+            /* compare two random values */
+            var jackPotTry = Math.floor(Math.random() * 51 + 1);
+            var jackPotWin = Math.floor(Math.random() * 51 + 1);
+            if (jackPotTry == jackPotWin) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
         /* Utility function to check if a value falls within a range of bounds */
-        private _checkRange(value:number, lowerBounds:number, upperBounds:number):number {
+        private _checkRange(value:number, lowerBounds:number, upperBounds:number): number {
             if (value >= lowerBounds && value <= upperBounds) {
                 return value;
             }
@@ -214,7 +228,7 @@ module states {
         }
 
         /* This function calculates the player's winnings, if any */
-        private _determineWinnings() {
+        private _determineWinnings(): void {
             if (this._blanks == 0) {
                 if (this._grapes == 3) {
                     this._winnings = this._playerBet * 10;
@@ -275,8 +289,8 @@ module states {
                 this._txtCredit = this._txtCredit - this._txtBet;
                 this._lblCredit.text = this._txtCredit.toString();
 
-                // increase jackpot by 1.5x bet amount
-                this._txtJackpot = this._txtJackpot + (this._txtBet * 1.5);
+                // increase jackpot by 2x bet amount
+                this._txtJackpot = this._txtJackpot + (this._txtBet * 2);
                 this._lblJackpot.text = this._txtJackpot.toString();
 
                 console.log("Lose");
@@ -285,7 +299,7 @@ module states {
             // set playerMoney and jackpot to new values
             this._playerMoney = this._txtCredit;
             this._jackpot = this._txtJackpot;
-
+            
         }
 
         //WORKHORSE OF THE GAME
@@ -327,11 +341,22 @@ module states {
                 this._lblBet.text = "0";
                 this._lblWinnings.text = "0";
 
-                this._determineWinnings();
+                if (this._checkJackPot()) {
+                    alert("You Won the $" + this._jackpot + " Jackpot!!");
+                    this._playerMoney += this._jackpot;
+                    this._jackpot = 1000;
+                    this._lblCredit.text = this._playerMoney.toString();
+                    this._lblJackpot.text = this._jackpot.toString();
+                }
+                else {
+                    this._determineWinnings();
+                }
+
+                this._playerBet = 0;
                 this._resetFruitTally();
 
-                console.log(this._playerMoney);
-                console.log(this._jackpot);
+                console.log("Player money: " + this._playerMoney);
+                console.log("Jackpot: "+ this._jackpot);
 
             }
 
