@@ -9,6 +9,7 @@
         Commit #2: Added additionaly spin functionality (decrease credit, increase jackpot)
         Commit #3: Added fruit tally reset and winnings functionality
         Commit #4: Added check jackpot win functionality
+        Commit #5: Added reset and exit buttons, and updated visual appearance
 */
 /// <reference path="../config/config.ts" />
 /// <reference path="../typings/jquery/jquery.d.ts" />
@@ -23,7 +24,6 @@
 /// <reference path="../objects/label.ts" />
 /// <reference path="../objects/button.ts" />
 /// <reference path="../objects/scene.ts" />
-/// <reference path="../states/over.ts" />
 /// <reference path="../states/game.ts" />
 /// <reference path="../states/menu.ts" />
 // GLOBAL GAME FRAMEWORK VARIABLES
@@ -37,7 +37,6 @@ var atlas;
 // GAME OBJECTS
 var menu;
 var game;
-var over;
 // manifest of all our assets
 var manifest = [
     { id: "StartButton", src: "../../Assets/images/StartButton.png" },
@@ -63,7 +62,9 @@ var data = {
         [73, 194, 69, 69, 0, 0, 0],
         [144, 150, 60, 60, 0, 0, 0],
         [144, 212, 60, 60, 0, 0, 0],
-        [206, 194, 60, 60, 0, 0, 0]
+        [206, 194, 60, 60, 0, 0, 0],
+        [3, 280, 125, 49, 0, 0, 0],
+        [138, 280, 125, 49, 0, 0, 0]
     ],
     "animations": {
         "bet_line": [0],
@@ -80,7 +81,9 @@ var data = {
         "seven": [11],
         "betMaxButton": [12],
         "genericButton": [13],
-        "spinButton": [14]
+        "spinButton": [14],
+        "resetButton": [15],
+        "exitButton": [16]
     },
 };
 function preload() {
@@ -116,7 +119,7 @@ function setupStats() {
     stats.domElement.style.top = "0px";
     document.body.appendChild(stats.domElement);
 }
-// state machine prep
+// State machine prep
 function changeState(state) {
     // Launch various scenes
     switch (state) {
@@ -131,12 +134,6 @@ function changeState(state) {
             stage.removeAllChildren();
             game = new states.Game();
             currentState = game;
-            break;
-        case config.OVER_STATE:
-            // show the game over scene
-            stage.removeAllChildren();
-            over = new states.Over();
-            currentState = over;
             break;
     }
     currentState.start();

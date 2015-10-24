@@ -9,6 +9,7 @@
         Commit #2: Added additionaly spin functionality (decrease credit, increase jackpot)
         Commit #3: Added fruit tally reset and winnings functionality
         Commit #4: Added check jackpot win functionality
+        Commit #5: Added reset and exit buttons, and updated visual appearance
 -->
 
 <!DOCTYPE html>
@@ -16,14 +17,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>COMP397 - SlotMachine Demo</title>
+    <title>Slot Machine - Wendall Hsu</title>
     <!-- CSS Section -->
     <link href="Content/reset.css" rel="stylesheet" />
     <link href="Content/game.css" rel="stylesheet" />
 </head>
 <body onload="preload();">
     <div class="game">
-        <canvas id="canvas" width="375" height="480"></canvas>
+        <canvas id="canvas" width="375" height="550"></canvas>
     </div>
 
     <!-- JavaScript Libraries-->
@@ -43,7 +44,6 @@
     <script src="Scripts/objects/button.js"></script>
     <script src="Scripts/objects/scene.js"></script>
 
-    <script src="Scripts/states/over.js"></script>
     <script src="Scripts/states/game.js"></script>
     <script src="Scripts/states/menu.js"></script>
 

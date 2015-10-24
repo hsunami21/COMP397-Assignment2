@@ -9,6 +9,7 @@
         Commit #2: Added additionaly spin functionality (decrease credit, increase jackpot)
         Commit #3: Added fruit tally reset and winnings functionality
         Commit #4: Added check jackpot win functionality
+        Commit #5: Added reset and exit buttons, and updated visual appearance
 */
 
 module states {
@@ -36,6 +37,8 @@ module states {
         private _btnBet100: objects.SpriteButton;
         private _btnBetMax: objects.SpriteButton;
         private _btnSpin: objects.SpriteButton;
+        private _btnReset: objects.SpriteButton;
+        private _btnExit: objects.SpriteButton;
 
         private _txtBet: number;
         private _txtCredit: number;
@@ -64,7 +67,7 @@ module states {
         // PUBLIC METHODS
         public start(): void {
             this._slotMachine = new createjs.Container();
-            //this._slotMachine.x = 132.5;
+            this._slotMachine.y = 75;
 
             this._background = new createjs.Bitmap(assets.getResult("background"));
             this._slotMachine.addChild(this._background); // add background image
@@ -81,13 +84,13 @@ module states {
             this._lblJackpot = new objects.Label(this._jackpot.toString(), "24px Consolas", "#ff0000", 230, 52, false);
             this._slotMachine.addChild(this._lblJackpot);
 
-            this._tile1 = new objects.GameObject("blank", 74, 192);
+            this._tile1 = new objects.GameObject("seven", 74, 192);
             this._slotMachine.addChild(this._tile1);
 
-            this._tile2 = new objects.GameObject("blank", 152, 192);
+            this._tile2 = new objects.GameObject("seven", 152, 192);
             this._slotMachine.addChild(this._tile2);
 
-            this._tile3 = new objects.GameObject("blank", 230, 192);
+            this._tile3 = new objects.GameObject("seven", 230, 192);
             this._slotMachine.addChild(this._tile3);
 
             this._betLine = new objects.GameObject("bet_line", 61, 225);
@@ -108,16 +111,22 @@ module states {
             this._btnSpin = new objects.SpriteButton("spinButton", 289, 386);
             this._slotMachine.addChild(this._btnSpin);
 
+            this._btnReset = new objects.SpriteButton("resetButton", 30, 15);
+            this._btnExit = new objects.SpriteButton("exitButton", 220, 15);
+
             this.addChild(this._slotMachine);
             stage.addChild(this);
+            stage.addChild(this._btnReset);
+            stage.addChild(this._btnExit);
 
             // add event listeners
             this._btnBet1.on("click", this._clickBet1Button, this);
             this._btnBet10.on("click", this._clickBet10Button, this);
             this._btnBet100.on("click", this._clickBet100Button, this);
             this._btnBetMax.on("click", this._clickBetMaxButton, this);
-
-            this._btnSpin.on("click", this._spinButtonClick, this);
+            this._btnSpin.on("click", this._clickSpinButton, this);
+            this._btnReset.on("click", this._clickResetButton, this);
+            this._btnExit.on("click", this._clickExitButton, this);
         }
 
 
@@ -125,7 +134,7 @@ module states {
         }
 
         // PRIVATE METHODS ++++++++++++++++++++++++++++++++++++++++++++++
-        // Callback function / Event Handler for Back Button Click
+        // Event handlers for bet buttons
         private _clickBet1Button(event: createjs.MouseEvent): void {
             this._playerBet += 1;
             this._lblBet.text = this._playerBet.toString();
@@ -142,8 +151,26 @@ module states {
         }
 
         private _clickBetMaxButton(event: createjs.MouseEvent): void {
-            this._lblBet.text = "MAX";
             this._playerBet = this._playerMoney;
+            this._lblBet.text = "MAX";
+        }
+
+        // Event handlers for reset and exit buttons
+        private _clickResetButton(event: createjs.MouseEvent): void {
+            this._playerMoney = 1000;
+            this._jackpot = 5000;
+            this._winnings = 0;
+            this._playerBet = 0;
+
+            this._lblCredit.text = this._playerMoney.toString();
+            this._lblJackpot.text = this._jackpot.toString();
+            this._lblWinnings.text = this._winnings.toString();
+            this._lblBet.text = this._playerBet.toString();
+
+        }
+
+        private _clickExitButton(event: createjs.MouseEvent): void {
+            changeState(config.MENU_STATE);
         }
 
         /* Utility function to reset all fruit tallies */
@@ -181,8 +208,7 @@ module states {
             }
         }
 
-        /* When this function is called it determines the betLine results.
-        e.g. Bar - Orange - Banana */
+        /* When this function is called it determines the betLine results.   e.g. Bar - Orange - Banana */
         private _reels(): string[] {
         var betLine: string[] = [" ", " ", " "];
         var outCome: number[] = [0, 0, 0];
@@ -278,51 +304,48 @@ module states {
                 else {
                     this._winnings = this._playerBet * 1;
                 }
+
                 this._lblWinnings.text = this._winnings.toString();
-                this._txtCredit = this._txtCredit + this._winnings;
-                this._lblCredit.text = this._txtCredit.toString();
+                this._playerMoney += this._winnings;
+                this._lblCredit.text = this._playerMoney.toString();
 
                 console.log("Win");
             }
             else {
                 // decrease credits by bet amount
-                this._txtCredit = this._txtCredit - this._txtBet;
-                this._lblCredit.text = this._txtCredit.toString();
+                this._playerMoney -= this._playerBet;
+                this._lblCredit.text = this._playerMoney.toString();
 
                 // increase jackpot by 2x bet amount
-                this._txtJackpot = this._txtJackpot + (this._txtBet * 2);
-                this._lblJackpot.text = this._txtJackpot.toString();
+                this._jackpot += (this._playerBet * 2);
+                this._lblJackpot.text = this._jackpot.toString();
 
                 console.log("Lose");
             }
-
-            // set playerMoney and jackpot to new values
-            this._playerMoney = this._txtCredit;
-            this._jackpot = this._txtJackpot;
             
         }
 
-        //WORKHORSE OF THE GAME
-        private _spinButtonClick(event: createjs.MouseEvent): void {
+        // WORKHORSE OF THE GAME
+        private _clickSpinButton(event: createjs.MouseEvent): void {
             
+            console.log("Bet: " + this._playerBet);
+
             // convert strings to numbers
             this._txtBet = parseInt(this._lblBet.text);
             this._txtCredit = parseInt(this._lblCredit.text);
             this._txtJackpot = parseInt(this._lblJackpot.text);
 
-            if (this._lblBet.text == "MAX") {
-                // bet all credits
-                this._txtBet = this._txtCredit;
-            }
-
-            if (this._txtCredit == 0) {
+            // check to see if player has money and is betting less than his/her current credits
+            if (this._playerMoney == 0) {
                 alert("You have no credits left!");
             }
-            else if (this._txtBet == 0) {
+            else if (this._playerBet == 0) {
                 alert("You did not bet anything!");
             }
-            else if (this._txtBet > this._txtCredit) {
+            else if (this._playerBet > this._playerMoney) {
                 alert("You do not have enough credits!");
+                this._playerBet = 0;
+                this._lblBet.text = this._playerBet.toString();
             }
             else {
                 

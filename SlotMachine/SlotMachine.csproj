@@ -72,9 +72,11 @@
     <Content Include="Assets\images\bet_line.gif" />
     <Content Include="Assets\images\blank.gif" />
     <Content Include="Assets\images\cherry.gif" />
+    <Content Include="Assets\images\exitButton.png" />
     <Content Include="Assets\images\genericButton.png" />
     <Content Include="Assets\images\grapes.gif" />
     <Content Include="Assets\images\orange.gif" />
+    <Content Include="Assets\images\resetButton.png" />
     <Content Include="Assets\images\seven.gif" />
     <Content Include="Assets\images\spinButton.png" />
     <Content Include="Assets\images\StartButton.png" />
@@ -123,7 +125,6 @@
     <TypeScriptCompile Include="Scripts\objects\spritebutton.ts" />
     <TypeScriptCompile Include="Scripts\states\game.ts" />
     <TypeScriptCompile Include="Scripts\states\menu.ts" />
-    <TypeScriptCompile Include="Scripts\states\over.ts" />
     <TypeScriptCompile Include="Scripts\typings\createjs-lib\createjs-lib.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\easeljs\easeljs.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
