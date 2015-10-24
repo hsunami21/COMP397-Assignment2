@@ -137,11 +137,39 @@ var states;
         };
         //WORKHORSE OF THE GAME
         Game.prototype._spinButtonClick = function (event) {
-            this._spinResult = this._reels();
-            this._tile1.gotoAndStop(this._spinResult[0]);
-            this._tile2.gotoAndStop(this._spinResult[1]);
-            this._tile3.gotoAndStop(this._spinResult[2]);
-            console.log(this._spinResult[0] + " - " + this._spinResult[1] + " - " + this._spinResult[2]);
+            // convert strings to numbers
+            this._txtBet = parseInt(this._lblBet.text);
+            this._txtCredit = parseInt(this._lblCredit.text);
+            this._txtJackpot = parseInt(this._lblJackpot.text);
+            if (this._lblBet.text == "MAX") {
+                // bet all credits
+                this._txtBet = this._txtCredit;
+            }
+            console.log(this._txtBet);
+            console.log(this._txtCredit);
+            if (this._txtCredit == 0) {
+                alert("You have no credits left!");
+            }
+            else if (this._txtBet == 0) {
+                alert("You did not bet anything!");
+            }
+            else if (this._txtBet > this._txtCredit) {
+                alert("You do not have enough credits!");
+            }
+            else {
+                // decrease credits by bet amount
+                this._txtCredit = this._txtCredit - this._txtBet;
+                this._lblCredit.text = "" + this._txtCredit;
+                // increase jackpot by bet amount
+                this._txtJackpot = this._txtJackpot + this._txtBet;
+                this._lblJackpot.text = "" + this._txtJackpot;
+                this._spinResult = this._reels();
+                this._tile1.gotoAndStop(this._spinResult[0]);
+                this._tile2.gotoAndStop(this._spinResult[1]);
+                this._tile3.gotoAndStop(this._spinResult[2]);
+                console.log(this._spinResult[0] + " - " + this._spinResult[1] + " - " + this._spinResult[2]);
+            }
+            this._lblBet.text = "0";
         };
         return Game;
     })(objects.Scene);
