@@ -15,10 +15,10 @@ var states;
         // PUBLIC METHODS
         Menu.prototype.start = function () {
             // hello label
-            this._helloLabel = new objects.Label("Game Start", "60px Consolas", "#000000", 320, 240, true);
+            this._helloLabel = new objects.Label("Game Start", "60px Consolas", "#000000", 187.5, 240, true);
             this.addChild(this._helloLabel); // add label to the stage
             // start button
-            this._startButton = new objects.Button("StartButton", 320, 340);
+            this._startButton = new objects.Button("StartButton", 187.5, 340);
             this._startButton.on("click", this._clickStartButton, this); // event listener
             this.addChild(this._startButton);
             stage.addChild(this);
@@ -35,4 +35,3 @@ var states;
     })(objects.Scene);
     states.Menu = Menu;
 })(states || (states = {}));
-//# sourceMappingURL=menu.js.map

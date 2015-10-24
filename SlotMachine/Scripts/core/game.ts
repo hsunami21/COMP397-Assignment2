@@ -1,4 +1,16 @@
-﻿/// <reference path="../config/config.ts" />
+﻿/*
+    Source name: Slot Machine
+    Author: Wendall Hsu 300739743
+    Last Modified By: Wendall Hsu
+    Date Last Modified: October 24, 2015
+    Program Description: Slot machine web application created using TypeScript
+    Revision History:
+        Commit #1: Initial commit and added bet button functionality
+        Commit #2: Added additionaly spin functionality (decrease credit, increase jackpot)
+        Commit #3: Added fruit tally reset and winnings functionality
+*/
+
+/// <reference path="../config/config.ts" />
 
 /// <reference path="../typings/jquery/jquery.d.ts" />
 /// <reference path="../typings/stats/stats.d.ts" />
@@ -36,8 +48,6 @@ var over: states.Over;
 
 // manifest of all our assets
 var manifest = [
-    { id: "BackButton", src: "../../Assets/images/BackButton.png" },
-    { id: "NextButton", src: "../../Assets/images/NextButton.png" },
     { id: "StartButton", src: "../../Assets/images/StartButton.png" },
     { id: "background", src: "../../Assets/images/background.png" },
     { id: "yay", src: "../../Assets/audio/yay.ogg" }
@@ -161,6 +171,6 @@ function changeState(state): void {
     }
 
     currentState.start();
-    console.log(currentState.numChildren);
+    
 }
  

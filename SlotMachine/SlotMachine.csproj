@@ -61,7 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\images\atlas.png" />
-    <Content Include="Assets\images\BackButton.png" />
     <Content Include="Assets\images\background.png" />
     <Content Include="Assets\images\banana.gif" />
     <Content Include="Assets\images\bar.gif" />
@@ -75,7 +74,6 @@
     <Content Include="Assets\images\cherry.gif" />
     <Content Include="Assets\images\genericButton.png" />
     <Content Include="Assets\images\grapes.gif" />
-    <Content Include="Assets\images\NextButton.png" />
     <Content Include="Assets\images\orange.gif" />
     <Content Include="Assets\images\seven.gif" />
     <Content Include="Assets\images\spinButton.png" />

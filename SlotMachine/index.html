@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿<!--
+    Source name: Slot Machine
+    Author: Wendall Hsu 300739743
+    Last Modified By: Wendall Hsu
+    Date Last Modified: October 24, 2015
+    Program Description: Slot machine web application created using TypeScript
+    Revision History:
+        Commit #1: Initial commit and added bet button functionality
+        Commit #2: Added additionaly spin functionality (decrease credit, increase jackpot)
+        Commit #3: Added fruit tally reset and winnings functionality
+-->
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,7 +22,7 @@
 </head>
 <body onload="preload();">
     <div class="game">
-        <canvas id="canvas" width="640" height="480"></canvas>
+        <canvas id="canvas" width="375" height="480"></canvas>
     </div>
 
     <!-- JavaScript Libraries-->

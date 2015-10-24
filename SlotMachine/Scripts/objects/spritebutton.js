@@ -28,4 +28,3 @@ var objects;
     })(objects.GameObject);
     objects.SpriteButton = SpriteButton;
 })(objects || (objects = {}));
-//# sourceMappingURL=spritebutton.js.map

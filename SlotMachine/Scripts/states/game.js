@@ -1,3 +1,14 @@
+/*
+    Source name: Slot Machine
+    Author: Wendall Hsu 300739743
+    Last Modified By: Wendall Hsu
+    Date Last Modified: October 24, 2015
+    Program Description: Slot machine web application created using TypeScript
+    Revision History:
+        Commit #1: Initial commit and added bet button functionality
+        Commit #2: Added additionaly spin functionality (decrease credit, increase jackpot)
+        Commit #3: Added fruit tally reset and winnings functionality
+*/
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -11,38 +22,33 @@ var states;
         // CONSTRUCTOR
         function Game() {
             _super.call(this);
-            // PRIVATE INSTANCE VARIABLES
-            this.playerMoney = 1000;
-            this.winnings = 0;
-            this.jackpot = 5000;
-            this.turn = 0;
-            this.playerBet = 0;
-            this.winNumber = 0;
-            this.lossNumber = 0;
-            this.fruits = "";
-            this.winRatio = 0;
-            this.grapes = 0;
-            this.bananas = 0;
-            this.oranges = 0;
-            this.cherries = 0;
-            this.bars = 0;
-            this.bells = 0;
-            this.sevens = 0;
-            this.blanks = 0;
+            // GAME VARIABLES
+            this._playerMoney = 1000;
+            this._winnings = 0;
+            this._jackpot = 5000;
+            this._playerBet = 0;
+            this._grapes = 0;
+            this._bananas = 0;
+            this._oranges = 0;
+            this._cherries = 0;
+            this._bars = 0;
+            this._bells = 0;
+            this._sevens = 0;
+            this._blanks = 0;
         }
         // PUBLIC METHODS
         Game.prototype.start = function () {
             this._slotMachine = new createjs.Container();
-            this._slotMachine.x = 132.5;
+            //this._slotMachine.x = 132.5;
             this._background = new createjs.Bitmap(assets.getResult("background"));
             this._slotMachine.addChild(this._background); // add background image
-            this._lblCredit = new objects.Label("1000", "24px Consolas", "#ff0000", 135, 335, false);
+            this._lblCredit = new objects.Label(this._playerMoney.toString(), "24px Consolas", "#ff0000", 135, 335, false);
             this._slotMachine.addChild(this._lblCredit);
-            this._lblBet = new objects.Label("0", "24px Consolas", "#ff0000", 210, 335, false);
+            this._lblBet = new objects.Label(this._playerBet.toString(), "24px Consolas", "#ff0000", 210, 335, false);
             this._slotMachine.addChild(this._lblBet);
-            this._lblWinnings = new objects.Label("0", "24px Consolas", "#ff0000", 325, 335, false);
+            this._lblWinnings = new objects.Label(this._winnings.toString(), "24px Consolas", "#ff0000", 325, 335, false);
             this._slotMachine.addChild(this._lblWinnings);
-            this._lblJackpot = new objects.Label("1000", "24px Consolas", "#ff0000", 230, 52, false);
+            this._lblJackpot = new objects.Label(this._jackpot.toString(), "24px Consolas", "#ff0000", 230, 52, false);
             this._slotMachine.addChild(this._lblJackpot);
             this._tile1 = new objects.GameObject("blank", 74, 192);
             this._slotMachine.addChild(this._tile1);
@@ -77,19 +83,39 @@ var states;
         // Callback function / Event Handler for Back Button Click
         Game.prototype._clickBet1Button = function (event) {
             this._lblBet.text = "1";
+            this._playerBet = 1;
         };
         Game.prototype._clickBet10Button = function (event) {
             this._lblBet.text = "10";
+            this._playerBet = 10;
         };
         Game.prototype._clickBet100Button = function (event) {
             this._lblBet.text = "100";
+            this._playerBet = 100;
         };
         Game.prototype._clickBetMaxButton = function (event) {
             this._lblBet.text = "MAX";
+            this._playerBet = this._playerMoney;
+        };
+        /* Utility function to reset all fruit tallies */
+        Game.prototype._resetFruitTally = function () {
+            this._grapes = 0;
+            this._bananas = 0;
+            this._oranges = 0;
+            this._cherries = 0;
+            this._bars = 0;
+            this._bells = 0;
+            this._sevens = 0;
+            this._blanks = 0;
         };
         /* Utility function to check if a value falls within a range of bounds */
         Game.prototype._checkRange = function (value, lowerBounds, upperBounds) {
-            return (value >= lowerBounds && value <= upperBounds) ? value : -1;
+            if (value >= lowerBounds && value <= upperBounds) {
+                return value;
+            }
+            else {
+                return -1;
+            }
         };
         /* When this function is called it determines the betLine results.
         e.g. Bar - Orange - Banana */
@@ -101,39 +127,108 @@ var states;
                 switch (outCome[reel]) {
                     case this._checkRange(outCome[reel], 1, 27):
                         betLine[reel] = "blank";
-                        //blanks++;
+                        this._blanks++;
                         break;
                     case this._checkRange(outCome[reel], 28, 37):
                         betLine[reel] = "grapes";
-                        //grapes++;
+                        this._grapes++;
                         break;
                     case this._checkRange(outCome[reel], 38, 46):
                         betLine[reel] = "banana";
-                        // bananas++;
+                        this._bananas++;
                         break;
                     case this._checkRange(outCome[reel], 47, 54):
                         betLine[reel] = "orange";
-                        //oranges++;
+                        this._oranges++;
                         break;
                     case this._checkRange(outCome[reel], 55, 59):
                         betLine[reel] = "cherry";
-                        //cherries++;
+                        this._cherries++;
                         break;
                     case this._checkRange(outCome[reel], 60, 62):
                         betLine[reel] = "bar";
-                        //bars++;
+                        this._bars++;
                         break;
                     case this._checkRange(outCome[reel], 63, 64):
                         betLine[reel] = "bell";
-                        //bells++;
+                        this._bells++;
                         break;
                     case this._checkRange(outCome[reel], 65, 65):
                         betLine[reel] = "seven";
-                        //sevens++;
+                        this._sevens++;
                         break;
                 }
             }
             return betLine;
+        };
+        /* This function calculates the player's winnings, if any */
+        Game.prototype._determineWinnings = function () {
+            if (this._blanks == 0) {
+                if (this._grapes == 3) {
+                    this._winnings = this._playerBet * 10;
+                }
+                else if (this._bananas == 3) {
+                    this._winnings = this._playerBet * 20;
+                }
+                else if (this._oranges == 3) {
+                    this._winnings = this._playerBet * 30;
+                }
+                else if (this._cherries == 3) {
+                    this._winnings = this._playerBet * 40;
+                }
+                else if (this._bars == 3) {
+                    this._winnings = this._playerBet * 50;
+                }
+                else if (this._bells == 3) {
+                    this._winnings = this._playerBet * 75;
+                }
+                else if (this._sevens == 3) {
+                    this._winnings = this._playerBet * 100;
+                }
+                else if (this._grapes == 2) {
+                    this._winnings = this._playerBet * 2;
+                }
+                else if (this._bananas == 2) {
+                    this._winnings = this._playerBet * 2;
+                }
+                else if (this._oranges == 2) {
+                    this._winnings = this._playerBet * 3;
+                }
+                else if (this._cherries == 2) {
+                    this._winnings = this._playerBet * 4;
+                }
+                else if (this._bars == 2) {
+                    this._winnings = this._playerBet * 5;
+                }
+                else if (this._bells == 2) {
+                    this._winnings = this._playerBet * 10;
+                }
+                else if (this._sevens == 2) {
+                    this._winnings = this._playerBet * 20;
+                }
+                else if (this._sevens == 1) {
+                    this._winnings = this._playerBet * 5;
+                }
+                else {
+                    this._winnings = this._playerBet * 1;
+                }
+                this._lblWinnings.text = this._winnings.toString();
+                this._txtCredit = this._txtCredit + this._winnings;
+                this._lblCredit.text = this._txtCredit.toString();
+                console.log("Win");
+            }
+            else {
+                // decrease credits by bet amount
+                this._txtCredit = this._txtCredit - this._txtBet;
+                this._lblCredit.text = this._txtCredit.toString();
+                // increase jackpot by 1.5x bet amount
+                this._txtJackpot = this._txtJackpot + (this._txtBet * 1.5);
+                this._lblJackpot.text = this._txtJackpot.toString();
+                console.log("Lose");
+            }
+            // set playerMoney and jackpot to new values
+            this._playerMoney = this._txtCredit;
+            this._jackpot = this._txtJackpot;
         };
         //WORKHORSE OF THE GAME
         Game.prototype._spinButtonClick = function (event) {
@@ -145,8 +240,6 @@ var states;
                 // bet all credits
                 this._txtBet = this._txtCredit;
             }
-            console.log(this._txtBet);
-            console.log(this._txtCredit);
             if (this._txtCredit == 0) {
                 alert("You have no credits left!");
             }
@@ -157,22 +250,23 @@ var states;
                 alert("You do not have enough credits!");
             }
             else {
-                // decrease credits by bet amount
-                this._txtCredit = this._txtCredit - this._txtBet;
-                this._lblCredit.text = "" + this._txtCredit;
-                // increase jackpot by bet amount
-                this._txtJackpot = this._txtJackpot + this._txtBet;
-                this._lblJackpot.text = "" + this._txtJackpot;
                 this._spinResult = this._reels();
+                // change reel pictures
                 this._tile1.gotoAndStop(this._spinResult[0]);
                 this._tile2.gotoAndStop(this._spinResult[1]);
                 this._tile3.gotoAndStop(this._spinResult[2]);
                 console.log(this._spinResult[0] + " - " + this._spinResult[1] + " - " + this._spinResult[2]);
+                console.log("Blanks: " + this._blanks + "\nGrapes: " + this._grapes + "\nBananas: " + this._bananas + "\nOranges: " + this._oranges + "\nCherries: " + this._cherries +
+                    "\nBars: " + this._bars + "\nBells: " + this._bells + "\nSevens: " + this._sevens);
+                this._lblBet.text = "0";
+                this._lblWinnings.text = "0";
+                this._determineWinnings();
+                this._resetFruitTally();
+                console.log(this._playerMoney);
+                console.log(this._jackpot);
             }
-            this._lblBet.text = "0";
         };
         return Game;
     })(objects.Scene);
     states.Game = Game;
 })(states || (states = {}));
-//# sourceMappingURL=game.js.map
