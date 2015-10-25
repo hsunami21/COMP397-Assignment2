@@ -23,6 +23,9 @@ var objects;
         // Event Handler for mouse out
         SpriteButton.prototype.outButton = function (event) {
             event.currentTarget.alpha = 1.0;
+            if (this.mouseEnabled == false) {
+                event.currentTarget.alpha = 0.3;
+            }
         };
         return SpriteButton;
     })(objects.GameObject);

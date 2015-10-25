@@ -10,6 +10,7 @@
         Commit #3: Added fruit tally reset and winnings functionality
         Commit #4: Added check jackpot win functionality
         Commit #5: Added reset and exit buttons, and updated visual appearance
+        Commit #6: Added sound effects and enable/disable button click functionality
 */
 
 module states {
@@ -39,10 +40,6 @@ module states {
         private _btnSpin: objects.SpriteButton;
         private _btnReset: objects.SpriteButton;
         private _btnExit: objects.SpriteButton;
-
-        private _txtBet: number;
-        private _txtCredit: number;
-        private _txtJackpot: number;
 
         // GAME VARIABLES
         private _playerMoney: number = 1000;
@@ -134,25 +131,92 @@ module states {
         }
 
         // PRIVATE METHODS ++++++++++++++++++++++++++++++++++++++++++++++
+        // Enable/disable button clicks during spin
+        private _enableButtonClick(): void {
+            this._btnBet1.alpha = 1;
+            this._btnBet10.alpha = 1;
+            this._btnBet100.alpha = 1;
+            this._btnBetMax.alpha = 1;
+            this._btnSpin.alpha = 1;
+
+            this._btnBet1.mouseEnabled = true;
+            this._btnBet10.mouseEnabled = true;
+            this._btnBet100.mouseEnabled = true;
+            this._btnBetMax.mouseEnabled = true;
+            this._btnSpin.mouseEnabled = true;
+        }
+
+        private _disableButtonClick(): void {
+            this._btnBet1.alpha = 0.3;
+            this._btnBet10.alpha = 0.3;
+            this._btnBet100.alpha = 0.3;
+            this._btnBetMax.alpha = 0.3;
+            this._btnSpin.alpha = 0.3;
+
+            this._btnBet1.mouseEnabled = false;
+            this._btnBet10.mouseEnabled = false;
+            this._btnBet100.mouseEnabled = false;
+            this._btnBetMax.mouseEnabled = false;
+            this._btnSpin.mouseEnabled = false;
+        }
+
         // Event handlers for bet buttons
         private _clickBet1Button(event: createjs.MouseEvent): void {
-            this._playerBet += 1;
-            this._lblBet.text = this._playerBet.toString();
+            if (this._playerMoney == 0) {
+                alert("You have no credits left! Click RESET to play again!");
+                this._disableButtonClick();
+            }
+            else if (this._playerMoney == parseInt(this._lblCredit.text)) {
+                alert("You cannot bet more than what you have!");
+            }
+            else {
+                createjs.Sound.play("bet");
+                this._playerBet += 1;
+                this._lblBet.text = this._playerBet.toString();
+            }
+
         }
 
         private _clickBet10Button(event: createjs.MouseEvent): void {
-            this._playerBet += 10;
-            this._lblBet.text = this._playerBet.toString();
+            if (this._playerMoney == 0) {
+                alert("You have no credits left! Click RESET to play again!");
+                this._disableButtonClick();
+            }
+            else if (this._playerMoney == parseInt(this._lblCredit.text)) {
+                alert("You cannot bet more than what you have!");
+            }
+            else {
+                createjs.Sound.play("bet");
+                this._playerBet += 10;
+                this._lblBet.text = this._playerBet.toString();
+            }
         }
 
         private _clickBet100Button(event: createjs.MouseEvent): void {
-            this._playerBet += 100;
-            this._lblBet.text = this._playerBet.toString();
+            if (this._playerMoney == 0) {
+                alert("You have no credits left! Click RESET to play again!");
+                this._disableButtonClick();
+            }
+            else if (this._playerMoney == parseInt(this._lblCredit.text)) {
+                alert("You cannot bet more than what you have!");
+            }
+            else {
+                createjs.Sound.play("bet");
+                this._playerBet += 100;
+                this._lblBet.text = this._playerBet.toString();
+            }
         }
 
         private _clickBetMaxButton(event: createjs.MouseEvent): void {
-            this._playerBet = this._playerMoney;
-            this._lblBet.text = "MAX";
+            if (this._playerMoney == 0) {
+                alert("You have no credits left! Click RESET to play again!");
+                this._disableButtonClick();
+            }
+            else {
+                createjs.Sound.play("bet");
+                this._playerBet = this._playerMoney;
+                this._lblBet.text = "MAX";
+            }
         }
 
         // Event handlers for reset and exit buttons
@@ -167,9 +231,12 @@ module states {
             this._lblWinnings.text = this._winnings.toString();
             this._lblBet.text = this._playerBet.toString();
 
+            this._enableButtonClick();
+
         }
 
         private _clickExitButton(event: createjs.MouseEvent): void {
+            createjs.Sound.stop();
             changeState(config.MENU_STATE);
         }
 
@@ -309,6 +376,8 @@ module states {
                 this._playerMoney += this._winnings;
                 this._lblCredit.text = this._playerMoney.toString();
 
+                createjs.Sound.play("yay");
+
                 console.log("Win");
             }
             else {
@@ -329,17 +398,11 @@ module states {
         private _clickSpinButton(event: createjs.MouseEvent): void {
             
             console.log("Bet: " + this._playerBet);
+                        
+            var currentContext = this;
 
-            // convert strings to numbers
-            this._txtBet = parseInt(this._lblBet.text);
-            this._txtCredit = parseInt(this._lblCredit.text);
-            this._txtJackpot = parseInt(this._lblJackpot.text);
-
-            // check to see if player has money and is betting less than his/her current credits
-            if (this._playerMoney == 0) {
-                alert("You have no credits left!");
-            }
-            else if (this._playerBet == 0) {
+            // check to see if player is betting anything and is betting less than his/her current credits
+            if (this._playerBet == 0) {
                 alert("You did not bet anything!");
             }
             else if (this._playerBet > this._playerMoney) {
@@ -348,41 +411,50 @@ module states {
                 this._lblBet.text = this._playerBet.toString();
             }
             else {
-                
+                this._disableButtonClick();
+                createjs.Sound.play("spin");
                 this._spinResult = this._reels();
-
-                // change reel pictures
-                this._tile1.gotoAndStop(this._spinResult[0]);
-                this._tile2.gotoAndStop(this._spinResult[1]);
-                this._tile3.gotoAndStop(this._spinResult[2]);
 
                 console.log(this._spinResult[0] + " - " + this._spinResult[1] + " - " + this._spinResult[2]);
                 console.log("Blanks: " + this._blanks + "\nGrapes: " + this._grapes + "\nBananas: " + this._bananas + "\nOranges: " + this._oranges + "\nCherries: " + this._cherries +
                     "\nBars: " + this._bars + "\nBells: " + this._bells + "\nSevens: " + this._sevens);
 
+                // change reel pictures 1 second at a time
+                setTimeout(function () { currentContext._tile1.gotoAndStop(currentContext._spinResult[0]); }, 1000);
+                setTimeout(function () { currentContext._tile2.gotoAndStop(currentContext._spinResult[1]) }, 2000);
+                setTimeout(function () { currentContext._tile3.gotoAndStop(currentContext._spinResult[2]) }, 3000);
 
-                this._lblBet.text = "0";
-                this._lblWinnings.text = "0";
+               
+                // show winnings/losings after 5 seconds
+                setTimeout(function () {
+                    currentContext._lblBet.text = "0";
+                    currentContext._lblWinnings.text = "0";
 
-                if (this._checkJackPot()) {
-                    alert("You Won the $" + this._jackpot + " Jackpot!!");
-                    this._playerMoney += this._jackpot;
-                    this._jackpot = 1000;
-                    this._lblCredit.text = this._playerMoney.toString();
-                    this._lblJackpot.text = this._jackpot.toString();
-                }
-                else {
-                    this._determineWinnings();
-                }
+                    if (currentContext._checkJackPot()) {
+                        createjs.Sound.play("jackpot");
+                        alert("You Won the $" + currentContext._jackpot + " Jackpot!!!");
+                        currentContext._playerMoney += currentContext._jackpot;
+                        currentContext._jackpot = 1000;
+                        currentContext._lblCredit.text = currentContext._playerMoney.toString();
+                        currentContext._lblJackpot.text = currentContext._jackpot.toString();
+                        
+                    }
+                    else {
+                        currentContext._determineWinnings();
+                    }
 
-                this._playerBet = 0;
-                this._resetFruitTally();
+                    currentContext._playerBet = 0;
+                    currentContext._resetFruitTally();
+                    currentContext._enableButtonClick();
+                    
+                    console.log("Player money: " + currentContext._playerMoney);
+                    console.log("Jackpot: " + currentContext._jackpot);
+                }, 5000);
 
-                console.log("Player money: " + this._playerMoney);
-                console.log("Jackpot: "+ this._jackpot);
-
+                
             }
 
+            
             
         }
 

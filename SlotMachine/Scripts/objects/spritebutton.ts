@@ -16,9 +16,15 @@
             event.currentTarget.alpha = 0.7;
         }
 
+        
+
         // Event Handler for mouse out
         outButton(event: createjs.MouseEvent): void {
             event.currentTarget.alpha = 1.0;
+
+            if (this.mouseEnabled == false) {
+                event.currentTarget.alpha = 0.3;
+            }
         }
     }
 } 

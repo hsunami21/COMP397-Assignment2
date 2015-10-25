@@ -60,6 +60,10 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\audio\bet.mp3" />
+    <Content Include="Assets\audio\jackpot.mp3" />
+    <Content Include="Assets\audio\reels.mp3" />
+    <Content Include="Assets\audio\start.mp3" />
     <Content Include="Assets\images\atlas.png" />
     <Content Include="Assets\images\background.png" />
     <Content Include="Assets\images\banana.gif" />
@@ -82,8 +86,6 @@
     <Content Include="Assets\images\StartButton.png" />
     <Content Include="packages.config" />
     <Content Include="Assets\fonts\Dock51.ttf" />
-    <Content Include="Assets\audio\engine.ogg" />
-    <Content Include="Assets\audio\thunder.ogg" />
     <Content Include="Assets\audio\yay.ogg" />
     <Content Include="Assets\images\AssetInfo.xlsx" />
     <Content Include="Assets\images\Thumbs.db" />

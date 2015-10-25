@@ -10,6 +10,7 @@
         Commit #3: Added fruit tally reset and winnings functionality
         Commit #4: Added check jackpot win functionality
         Commit #5: Added reset and exit buttons, and updated visual appearance
+        Commit #6: Added sound effects and enable/disable button click functionality
 */
 /// <reference path="../config/config.ts" />
 /// <reference path="../typings/jquery/jquery.d.ts" />
@@ -41,7 +42,11 @@ var game;
 var manifest = [
     { id: "StartButton", src: "../../Assets/images/StartButton.png" },
     { id: "background", src: "../../Assets/images/background.png" },
-    { id: "yay", src: "../../Assets/audio/yay.ogg" }
+    { id: "yay", src: "../../Assets/audio/yay.ogg" },
+    { id: "bet", src: "../../Assets/audio/bet.mp3" },
+    { id: "start", src: "../../Assets/audio/start.mp3" },
+    { id: "jackpot", src: "../../Assets/audio/jackpot.mp3" },
+    { id: "spin", src: "../../Assets/audio/spin.mp3" }
 ];
 var data = {
     "images": [
