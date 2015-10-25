@@ -6,13 +6,14 @@
     Program Description: Slot machine web application created using TypeScript
     Revision History:
         Commit #1: Initial commit and added bet button functionality
-        Commit #2: Added additionaly spin functionality (decrease credit, increase jackpot)
+        Commit #2: Added additional spin functionality (decrease credit, increase jackpot)
         Commit #3: Added fruit tally reset and winnings functionality
         Commit #4: Added check jackpot win functionality
         Commit #5: Added reset and exit buttons, and updated visual appearance
         Commit #6: Added sound effects and enable/disable button click functionality
         Commit #7: Adjusted bet max function and bet button functionality
         Commit #8: Modified spin function to prevent player from resetting or exiting while slot machine is spinning
+        Commit #9: Minor changes to alert messages
 */
 
 module states {
@@ -173,7 +174,7 @@ module states {
                 this._disableButtonClick();
             }
             else if (this._playerBet + 1 > 999) {
-                alert("You cannot bet more than the maximum of $999!");
+                alert("You cannot bet more than the maximum of 999 credits!");
             }
             else {
                 createjs.Sound.play("bet");
@@ -189,7 +190,7 @@ module states {
                 this._disableButtonClick();
             }
             else if (this._playerBet + 10 > 999) {
-                alert("You cannot bet more than the maximum of $999!");
+                alert("You cannot bet more than the maximum of 999 credits!");
             }
             else {
                 createjs.Sound.play("bet");
@@ -204,7 +205,7 @@ module states {
                 this._disableButtonClick();
             }
             else if (this._playerBet + 100 > 999) {
-                alert("You cannot bet more than the maximum of $999!");
+                alert("You cannot bet more than the maximum of 999 credits!");
             }
             else {
                 createjs.Sound.play("bet");
