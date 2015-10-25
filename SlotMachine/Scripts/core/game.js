@@ -2,7 +2,7 @@
     Source name: Slot Machine
     Author: Wendall Hsu 300739743
     Last Modified By: Wendall Hsu
-    Date Last Modified: October 24, 2015
+    Date Last Modified: October 25, 2015
     Program Description: Slot machine web application created using TypeScript
     Revision History:
         Commit #1: Initial commit and added bet button functionality
@@ -12,6 +12,7 @@
         Commit #5: Added reset and exit buttons, and updated visual appearance
         Commit #6: Added sound effects and enable/disable button click functionality
         Commit #7: Adjusted bet max function and bet button functionality
+        Commit #8: Modified spin function to prevent player from resetting or exiting while slot machine is spinning
 */
 /// <reference path="../config/config.ts" />
 /// <reference path="../typings/jquery/jquery.d.ts" />

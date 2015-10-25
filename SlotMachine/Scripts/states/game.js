@@ -2,7 +2,7 @@
     Source name: Slot Machine
     Author: Wendall Hsu 300739743
     Last Modified By: Wendall Hsu
-    Date Last Modified: October 24, 2015
+    Date Last Modified: October 25, 2015
     Program Description: Slot machine web application created using TypeScript
     Revision History:
         Commit #1: Initial commit and added bet button functionality
@@ -12,6 +12,7 @@
         Commit #5: Added reset and exit buttons, and updated visual appearance
         Commit #6: Added sound effects and enable/disable button click functionality
         Commit #7: Adjusted bet max function and bet button functionality
+        Commit #8: Modified spin function to prevent player from resetting or exiting while slot machine is spinning
 */
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -72,11 +73,11 @@ var states;
             this._slotMachine.addChild(this._btnBetMax);
             this._btnSpin = new objects.SpriteButton("spinButton", 289, 386);
             this._slotMachine.addChild(this._btnSpin);
-            this._btnReset = new objects.SpriteButton("resetButton", 30, 15);
-            this._btnExit = new objects.SpriteButton("exitButton", 220, 15);
             this.addChild(this._slotMachine);
             stage.addChild(this);
+            this._btnReset = new objects.SpriteButton("resetButton", 30, 15);
             stage.addChild(this._btnReset);
+            this._btnExit = new objects.SpriteButton("exitButton", 220, 15);
             stage.addChild(this._btnExit);
             // add event listeners
             this._btnBet1.on("click", this._clickBet1Button, this);
@@ -97,11 +98,15 @@ var states;
             this._btnBet100.alpha = 1;
             this._btnBetMax.alpha = 1;
             this._btnSpin.alpha = 1;
+            this._btnReset.alpha = 1;
+            this._btnExit.alpha = 1;
             this._btnBet1.mouseEnabled = true;
             this._btnBet10.mouseEnabled = true;
             this._btnBet100.mouseEnabled = true;
             this._btnBetMax.mouseEnabled = true;
             this._btnSpin.mouseEnabled = true;
+            this._btnReset.mouseEnabled = true;
+            this._btnExit.mouseEnabled = true;
         };
         Game.prototype._disableButtonClick = function () {
             this._btnBet1.alpha = 0.3;
@@ -171,6 +176,7 @@ var states;
         };
         // Event handlers for reset and exit buttons
         Game.prototype._clickResetButton = function (event) {
+            createjs.Sound.stop();
             this._playerMoney = 1000;
             this._jackpot = 5000;
             this._winnings = 0;
@@ -332,7 +338,11 @@ var states;
             console.log("Bet: " + this._playerBet);
             var currentContext = this;
             // check to see if player is betting anything and is betting less than his/her current credits
-            if (this._playerBet == 0) {
+            if (this._playerMoney == 0) {
+                alert("You have no credits left! Click RESET to play again!");
+                this._disableButtonClick();
+            }
+            else if (this._playerBet == 0) {
                 alert("You did not bet anything!");
             }
             else if (this._playerBet > this._playerMoney) {
@@ -342,6 +352,11 @@ var states;
             }
             else {
                 this._disableButtonClick();
+                // stop user from resetting and exiting while slot machine is spinning
+                this._btnReset.alpha = 0.3;
+                this._btnExit.alpha = 0.3;
+                this._btnReset.mouseEnabled = false;
+                this._btnExit.mouseEnabled = false;
                 createjs.Sound.play("spin");
                 this._spinResult = this._reels();
                 console.log(this._spinResult[0] + " - " + this._spinResult[1] + " - " + this._spinResult[2]);

@@ -62,7 +62,7 @@
   <ItemGroup>
     <Content Include="Assets\audio\bet.mp3" />
     <Content Include="Assets\audio\jackpot.mp3" />
-    <Content Include="Assets\audio\reels.mp3" />
+    <Content Include="Assets\audio\spin.mp3" />
     <Content Include="Assets\audio\start.mp3" />
     <Content Include="Assets\images\atlas.png" />
     <Content Include="Assets\images\background.png" />
