@@ -11,6 +11,7 @@
         Commit #4: Added check jackpot win functionality
         Commit #5: Added reset and exit buttons, and updated visual appearance
         Commit #6: Added sound effects and enable/disable button click functionality
+        Commit #7: Adjusted bet max function and bet button functionality
 */
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -120,8 +121,8 @@ var states;
                 alert("You have no credits left! Click RESET to play again!");
                 this._disableButtonClick();
             }
-            else if (this._playerMoney == parseInt(this._lblCredit.text)) {
-                alert("You cannot bet more than what you have!");
+            else if (this._playerBet + 1 > 999) {
+                alert("You cannot bet more than the maximum of $999!");
             }
             else {
                 createjs.Sound.play("bet");
@@ -134,8 +135,8 @@ var states;
                 alert("You have no credits left! Click RESET to play again!");
                 this._disableButtonClick();
             }
-            else if (this._playerMoney == parseInt(this._lblCredit.text)) {
-                alert("You cannot bet more than what you have!");
+            else if (this._playerBet + 10 > 999) {
+                alert("You cannot bet more than the maximum of $999!");
             }
             else {
                 createjs.Sound.play("bet");
@@ -148,8 +149,8 @@ var states;
                 alert("You have no credits left! Click RESET to play again!");
                 this._disableButtonClick();
             }
-            else if (this._playerMoney == parseInt(this._lblCredit.text)) {
-                alert("You cannot bet more than what you have!");
+            else if (this._playerBet + 100 > 999) {
+                alert("You cannot bet more than the maximum of $999!");
             }
             else {
                 createjs.Sound.play("bet");
@@ -164,8 +165,8 @@ var states;
             }
             else {
                 createjs.Sound.play("bet");
-                this._playerBet = this._playerMoney;
-                this._lblBet.text = "MAX";
+                this._playerBet = 999;
+                this._lblBet.text = this._playerBet.toString();
             }
         };
         // Event handlers for reset and exit buttons
@@ -352,7 +353,6 @@ var states;
                 setTimeout(function () { currentContext._tile3.gotoAndStop(currentContext._spinResult[2]); }, 3000);
                 // show winnings/losings after 5 seconds
                 setTimeout(function () {
-                    currentContext._lblBet.text = "0";
                     currentContext._lblWinnings.text = "0";
                     if (currentContext._checkJackPot()) {
                         createjs.Sound.play("jackpot");
@@ -366,6 +366,7 @@ var states;
                         currentContext._determineWinnings();
                     }
                     currentContext._playerBet = 0;
+                    currentContext._lblBet.text = currentContext._playerBet.toString();
                     currentContext._resetFruitTally();
                     currentContext._enableButtonClick();
                     console.log("Player money: " + currentContext._playerMoney);

@@ -11,6 +11,7 @@
         Commit #4: Added check jackpot win functionality
         Commit #5: Added reset and exit buttons, and updated visual appearance
         Commit #6: Added sound effects and enable/disable button click functionality
+        Commit #7: Adjusted bet max function and bet button functionality
 */
 
 module states {
@@ -166,8 +167,8 @@ module states {
                 alert("You have no credits left! Click RESET to play again!");
                 this._disableButtonClick();
             }
-            else if (this._playerMoney == parseInt(this._lblCredit.text)) {
-                alert("You cannot bet more than what you have!");
+            else if (this._playerBet + 1 > 999) {
+                alert("You cannot bet more than the maximum of $999!");
             }
             else {
                 createjs.Sound.play("bet");
@@ -182,8 +183,8 @@ module states {
                 alert("You have no credits left! Click RESET to play again!");
                 this._disableButtonClick();
             }
-            else if (this._playerMoney == parseInt(this._lblCredit.text)) {
-                alert("You cannot bet more than what you have!");
+            else if (this._playerBet + 10 > 999) {
+                alert("You cannot bet more than the maximum of $999!");
             }
             else {
                 createjs.Sound.play("bet");
@@ -197,8 +198,8 @@ module states {
                 alert("You have no credits left! Click RESET to play again!");
                 this._disableButtonClick();
             }
-            else if (this._playerMoney == parseInt(this._lblCredit.text)) {
-                alert("You cannot bet more than what you have!");
+            else if (this._playerBet + 100 > 999) {
+                alert("You cannot bet more than the maximum of $999!");
             }
             else {
                 createjs.Sound.play("bet");
@@ -214,8 +215,8 @@ module states {
             }
             else {
                 createjs.Sound.play("bet");
-                this._playerBet = this._playerMoney;
-                this._lblBet.text = "MAX";
+                this._playerBet = 999;
+                this._lblBet.text = this._playerBet.toString();
             }
         }
 
@@ -232,7 +233,6 @@ module states {
             this._lblBet.text = this._playerBet.toString();
 
             this._enableButtonClick();
-
         }
 
         private _clickExitButton(event: createjs.MouseEvent): void {
@@ -277,46 +277,47 @@ module states {
 
         /* When this function is called it determines the betLine results.   e.g. Bar - Orange - Banana */
         private _reels(): string[] {
-        var betLine: string[] = [" ", " ", " "];
-        var outCome: number[] = [0, 0, 0];
+            var betLine: string[] = [" ", " ", " "];
+            var outCome: number[] = [0, 0, 0];
 
-        for (var reel = 0; reel < 3; reel++) {
-            outCome[reel] = Math.floor((Math.random() * 65) + 1);
-            switch (outCome[reel]) {
-                case this._checkRange(outCome[reel], 1, 27):  // 41.5% probability
-                    betLine[reel] = "blank";
-                    this._blanks++;
-                    break;
-                case this._checkRange(outCome[reel], 28, 37): // 15.4% probability
-                    betLine[reel] = "grapes";
-                    this._grapes++;
-                    break;
-                case this._checkRange(outCome[reel], 38, 46): // 13.8% probability
-                    betLine[reel] = "banana";
-                    this._bananas++;
-                    break;
-                case this._checkRange(outCome[reel], 47, 54): // 12.3% probability
-                    betLine[reel] = "orange";
-                    this._oranges++;
-                    break;
-                case this._checkRange(outCome[reel], 55, 59): //  7.7% probability
-                    betLine[reel] = "cherry";
-                    this._cherries++;
-                    break;
-                case this._checkRange(outCome[reel], 60, 62): //  4.6% probability
-                    betLine[reel] = "bar";
-                    this._bars++;
-                    break;
-                case this._checkRange(outCome[reel], 63, 64): //  3.1% probability
-                    betLine[reel] = "bell";
-                    this._bells++;
-                    break;
-                case this._checkRange(outCome[reel], 65, 65): //  1.5% probability
-                    betLine[reel] = "seven";
-                    this._sevens++;
-                    break;
+            for (var reel = 0; reel < 3; reel++) {
+                outCome[reel] = Math.floor((Math.random() * 65) + 1);
+                switch (outCome[reel]) {
+                    case this._checkRange(outCome[reel], 1, 27):  // 41.5% probability
+                        betLine[reel] = "blank";
+                        this._blanks++;
+                        break;
+                    case this._checkRange(outCome[reel], 28, 37): // 15.4% probability
+                        betLine[reel] = "grapes";
+                        this._grapes++;
+                        break;
+                    case this._checkRange(outCome[reel], 38, 46): // 13.8% probability
+                        betLine[reel] = "banana";
+                        this._bananas++;
+                        break;
+                    case this._checkRange(outCome[reel], 47, 54): // 12.3% probability
+                        betLine[reel] = "orange";
+                        this._oranges++;
+                        break;
+                    case this._checkRange(outCome[reel], 55, 59): //  7.7% probability
+                        betLine[reel] = "cherry";
+                        this._cherries++;
+                        break;
+                    case this._checkRange(outCome[reel], 60, 62): //  4.6% probability
+                        betLine[reel] = "bar";
+                        this._bars++;
+                        break;
+                    case this._checkRange(outCome[reel], 63, 64): //  3.1% probability
+                        betLine[reel] = "bell";
+                        this._bells++;
+                        break;
+                    case this._checkRange(outCome[reel], 65, 65): //  1.5% probability
+                        betLine[reel] = "seven";
+                        this._sevens++;
+                        break;
                 }
             }
+
             return betLine;
         }
 
@@ -426,8 +427,7 @@ module states {
 
                
                 // show winnings/losings after 5 seconds
-                setTimeout(function () {
-                    currentContext._lblBet.text = "0";
+                setTimeout(function () {  
                     currentContext._lblWinnings.text = "0";
 
                     if (currentContext._checkJackPot()) {
@@ -444,6 +444,8 @@ module states {
                     }
 
                     currentContext._playerBet = 0;
+                    currentContext._lblBet.text = currentContext._playerBet.toString();
+
                     currentContext._resetFruitTally();
                     currentContext._enableButtonClick();
                     

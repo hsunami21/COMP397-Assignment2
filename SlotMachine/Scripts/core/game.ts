@@ -11,6 +11,7 @@
         Commit #4: Added check jackpot win functionality
         Commit #5: Added reset and exit buttons, and updated visual appearance
         Commit #6: Added sound effects and enable/disable button click functionality
+        Commit #7: Adjusted bet max function and bet button functionality
 */
 
 /// <reference path="../config/config.ts" />
