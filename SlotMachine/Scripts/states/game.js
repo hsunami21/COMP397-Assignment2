@@ -2,7 +2,7 @@
     Source name: Slot Machine
     Author: Wendall Hsu 300739743
     Last Modified By: Wendall Hsu
-    Date Last Modified: October 25, 2015
+    Date Last Modified: October 30, 2015
     Program Description: Slot machine web application created using TypeScript
     Revision History:
         Commit #1: Initial commit and added bet button functionality
@@ -14,6 +14,7 @@
         Commit #7: Adjusted bet max function and bet button functionality
         Commit #8: Modified spin function to prevent player from resetting or exiting while slot machine is spinning
         Commit #9: Minor changes to alert messages
+        Commit #10: Modified reset button (reset reels) and spin button (stop sound) functionalities
 */
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -186,6 +187,9 @@ var states;
             this._lblJackpot.text = this._jackpot.toString();
             this._lblWinnings.text = this._winnings.toString();
             this._lblBet.text = this._playerBet.toString();
+            this._tile1.gotoAndStop("seven");
+            this._tile2.gotoAndStop("seven");
+            this._tile3.gotoAndStop("seven");
             this._enableButtonClick();
         };
         Game.prototype._clickExitButton = function (event) {
@@ -337,6 +341,7 @@ var states;
         // WORKHORSE OF THE GAME
         Game.prototype._clickSpinButton = function (event) {
             console.log("Bet: " + this._playerBet);
+            createjs.Sound.stop();
             var currentContext = this;
             // check to see if player is betting anything and is betting less than his/her current credits
             if (this._playerMoney == 0) {
@@ -394,3 +399,4 @@ var states;
     })(objects.Scene);
     states.Game = Game;
 })(states || (states = {}));
+//# sourceMappingURL=game.js.map

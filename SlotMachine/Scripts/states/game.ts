@@ -2,7 +2,7 @@
     Source name: Slot Machine
     Author: Wendall Hsu 300739743
     Last Modified By: Wendall Hsu
-    Date Last Modified: October 25, 2015
+    Date Last Modified: October 30, 2015
     Program Description: Slot machine web application created using TypeScript
     Revision History:
         Commit #1: Initial commit and added bet button functionality
@@ -14,6 +14,7 @@
         Commit #7: Adjusted bet max function and bet button functionality
         Commit #8: Modified spin function to prevent player from resetting or exiting while slot machine is spinning
         Commit #9: Minor changes to alert messages
+        Commit #10: Modified reset button (reset reels) and spin button (stop sound) functionalities
 */
 
 module states {
@@ -240,6 +241,10 @@ module states {
             this._lblWinnings.text = this._winnings.toString();
             this._lblBet.text = this._playerBet.toString();
 
+            this._tile1.gotoAndStop("seven");
+            this._tile2.gotoAndStop("seven");
+            this._tile3.gotoAndStop("seven");
+
             this._enableButtonClick();
         }
 
@@ -407,7 +412,8 @@ module states {
         private _clickSpinButton(event: createjs.MouseEvent): void {
             
             console.log("Bet: " + this._playerBet);
-                        
+            
+            createjs.Sound.stop();
             var currentContext = this;
 
             // check to see if player is betting anything and is betting less than his/her current credits
